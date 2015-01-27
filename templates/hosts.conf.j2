@@ -1,11 +1,10 @@
-# Munin hosts.
-{% for host in munin_hosts %}
-[{{ host.name }}]
-    address {{ host.address }}
-{% if host.extra %}
-{% for extra in host.extra %}
-    {{ extra }}
-{% endfor %}
-{% endif %}
+# Munin hosts. [ZUMATA EDITION]
+{% for group in ['tag_munin_true', 'tag_munin_source'] %}{# groups['tag_munin_*'] is not supported QQ #}
+{% for host in groups[group] %}
+[zumata;{{ hostvars[host]['ec2_tag_Name'].split()[0] | replace('_', '-') }}]
+    address {{ hostvars[host]['ec2_public_dns_name'] }}
+    use_node_name yes
 
 {% endfor %}
+{% endfor %}
+
